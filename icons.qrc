@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/fast-forward.svg</file>
+        <file>icons/next.svg</file>
+        <file>icons/previous.svg</file>
+        <file>icons/rewind.svg</file>
+    </qresource>
+</RCC>
