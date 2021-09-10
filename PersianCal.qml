@@ -12,6 +12,7 @@ Item {
 
     ColumnLayout{
         anchors.fill: parent
+        anchors.margins: 10
         Item{
             Layout.preferredHeight: 60
             Layout.fillWidth: true
@@ -33,7 +34,9 @@ Item {
                     Layout.fillWidth: true
                     Button{
                         anchors.fill: parent
-                        text: "previous year"
+                        text: "ماه قبلی"
+                        font.family: "B Nazanin"
+                        font.bold: true
                         onClicked: {
                             pcalendar.prev_month()
                         }
@@ -52,6 +55,8 @@ Item {
                             text: pcalendar.day_s
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
+                            font.family: "B Nazanin"
+                            font.bold: true
                         }
                         Label{
                             Layout.fillHeight: true
@@ -60,6 +65,8 @@ Item {
                             text: pcalendar.month
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
+                            font.family: "B Nazanin"
+                            font.bold: true
                         }
                         Label{
                             Layout.fillHeight: true
@@ -68,6 +75,8 @@ Item {
                             text: pcalendar.year_
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
+                            font.family: "B Nazanin"
+                            font.bold: true
                         }
                     }
                 }
@@ -76,7 +85,9 @@ Item {
                    Layout.fillWidth: true
                    Button{
                        anchors.fill: parent
-                       text: "next month"
+                       text: "ماه بعدی"
+                       font.family: "B Nazanin"
+                       font.bold: true
                        onClicked: {
                            pcalendar.next_month()
                        }
@@ -99,6 +110,7 @@ Item {
         Column{
             Layout.fillHeight: true
             Layout.fillWidth: true
+
             id:grid
             Repeater{
                 model:PersianCalendar{
@@ -117,17 +129,19 @@ Item {
                             Rectangle{
                                 anchors.fill: parent
                                 anchors.margins: dataModel[index].isheader===true?0:5
-                                radius: dataModel[index].isheader===true?0:20
+                                radius: dataModel[index].isheader===true?0:4
+                                border.width: 4
                                 border.color:dataModel[index].borderColor
-                                color: dataModel[index].isheader===true?"black":"transparent"
-                                border.width: dataModel[index].borderWidth
+                                color: dataModel[index].isheader===true?"gray":"transparent"
                                 Text {
                                     anchors.fill: parent
                                     text: dataModel[index].day
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: dataModel[index].is_current===true?18:15
+                                    font.pointSize: dataModel[index].is_current===true?18:18
                                     color: dataModel[index].textColor
+                                    font.family: "B Nazanin"
+                                    font.bold: true
                                 }
                             }
                         }

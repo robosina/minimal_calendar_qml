@@ -82,3 +82,16 @@ void day_t::setTextColor(const QString &newTextColor)
     m_textColor = newTextColor;
     emit textColorChanged();
 }
+
+QDate *day_t::date() const
+{
+    return m_date;
+}
+
+void day_t::setDate(QDate *newDate)
+{
+    if (m_date == newDate)
+        return;
+    m_date = newDate;
+    emit dateChanged();
+}

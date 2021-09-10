@@ -58,9 +58,9 @@ signals:
 private:
     int border_with_{1};
 
-    QVector<QList<day_t*>> days_;
+    QVector<QVector<day_t*>> days_;
 
-    QList<day_t*> days_string_;
+    QVector<day_t*> days_string_;
 
     QStringList jalali_months = {"فروردین" , "اردیبهشت", "خرداد", "تیر", "اَمرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"};
 
@@ -75,9 +75,9 @@ private:
 
     static int day_of_week(const QDate& date);
 
-    day_t *day_create(QString & day_number_,bool is_header);
+    day_t *day_create(QString & day_number_, bool is_header, int dow=0, QDate *date=nullptr);
 
-    day_t *day_create(QString && day_number_,bool is_header);
+    day_t *day_create(QString && day_number_, bool is_header, int dow=0, QDate *date=nullptr);
 
     void create_month(QDate &selected_date);
 

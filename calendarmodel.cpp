@@ -8,17 +8,18 @@ CalendarModel::CalendarModel(QObject *parent)
     jalali_calendar = QCalendar(QCalendar::System::Jalali);
 
     days_string_={
-        day_create("ش",true),
-        day_create("ی",true),
-        day_create("د",true),
-        day_create("س",true),
-        day_create("چ",true),
-        day_create("پ",true),
-        day_create("ج",true),
+        day_create("شنبه",true),
+        day_create("یک شنبه",true),
+        day_create("دو شنبه",true),
+        day_create("سه شنبه",true),
+        day_create("چهارشنبه",true),
+        day_create("پنج شنبه",true),
+        day_create("جمعه",true),
     };
     for(auto * d:qAsConst(days_string_)){
         d->setTextColor("white");
     }
+    std::reverse(days_string_.begin(),days_string_.end());
 
     create_month(selected_date_);
 }
@@ -70,23 +71,35 @@ int CalendarModel::day_of_week(const QDate &date)
 }
 
 
-day_t* CalendarModel::day_create(QString &day_number_, bool is_header)
+day_t* CalendarModel::day_create(QString &day_number_, bool is_header,int dow, QDate *date)
 {
     auto * day = new day_t();
     day->setDay(day_number_);
     day->setIsheader(is_header);
-    day->setBorderColor("black");
     day->setBorderWidth(border_with_);
+    if(date!=nullptr){
+        QDate* datep = new QDate(*date);
+        day->setDate(datep);
+    }
+    if(dow==7){
+        day->setTextColor("red");
+    }
     return day;
 }
 
-day_t *CalendarModel::day_create(QString &&day_number_, bool is_header)
+day_t *CalendarModel::day_create(QString &&day_number_, bool is_header,int dow, QDate *date)
 {
     auto * day = new day_t();
     day->setDay(day_number_);
     day->setIsheader(is_header);
-    day->setBorderColor("black");
     day->setBorderWidth(border_with_);
+    if(date!=nullptr){
+        QDate* datep = new QDate(*date);
+        day->setDate(datep);
+    }
+    if(dow==7){
+        day->setTextColor("red");
+    }
     return day;
 }
 
@@ -115,9 +128,9 @@ void CalendarModel::create_month(QDate &selected_date)
     const auto m = jalali_parsed.month;
     const auto d = jalali_parsed.day;
 
-    m_month=jalali_months[m-1];
-    m_day_s = d;
-    m_year_ = y;
+    setMonth(jalali_months[m-1]);
+    setDay_s(d);
+    setYear_(y);
 
     auto temp_date=selected_date;
     if(d>1){
@@ -127,11 +140,11 @@ void CalendarModel::create_month(QDate &selected_date)
     days_.push_back(days_string_);
     QVector<day_t*> each_row;
     each_row.resize(7);
-    int dow;
+    int dow{0};
     while (jalali_calendar.partsFromDate(temp_date).month==m) {
         jalali_parsed = jalali_calendar.partsFromDate(temp_date);
         dow = day_of_week(temp_date);
-        each_row[dow-1]=day_create(QString::number(jalali_parsed.day),false);
+        each_row[dow-1]=day_create(QString::number(jalali_parsed.day),false,dow,&temp_date);
         if(temp_date==current_date_){
             each_row[dow-1]->setIs_current(true);
             each_row[dow-1]->setBorderColor("green");
@@ -139,16 +152,18 @@ void CalendarModel::create_month(QDate &selected_date)
         }
         if(dow==7){
             not_null(each_row);
-            days_.push_back(each_row.toList());
+            std::reverse(each_row.begin(),each_row.end());
+            days_.push_back(each_row);
             each_row.clear();
             each_row.resize(7);
             dow=0;
         }
         temp_date = temp_date.addDays(1);
     }
-    if(dow!=0){
+    if(dow>0){
         not_null(each_row);
-        days_.push_back(each_row.toList());
+        std::reverse(each_row.begin(),each_row.end());
+        days_.push_back(each_row);
     }
 
 
