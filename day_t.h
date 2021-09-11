@@ -12,7 +12,9 @@ class day_t : public QObject
     Q_PROPERTY(QString borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
     Q_PROPERTY(int borderWidth READ borderWidth WRITE setBorderWidth NOTIFY borderWidthChanged)
     Q_PROPERTY(QString textColor READ textColor WRITE setTextColor NOTIFY textColorChanged)
+    Q_PROPERTY(QString boxColor READ boxColor WRITE setBoxColor NOTIFY boxColorChanged)
     Q_PROPERTY(QDate* date READ date WRITE setDate NOTIFY dateChanged)
+    Q_PROPERTY(float boxOpacity READ boxOpacity WRITE setBoxOpacity NOTIFY boxOpacityChanged)
     QString m_day;
 
     bool m_isheader;
@@ -26,6 +28,10 @@ class day_t : public QObject
     QString m_textColor{"black"};
 
     QDate *m_date{nullptr};
+
+    QString m_boxColor{"transparent"};
+
+    float m_boxOpacity{1};
 
 public:
     explicit day_t(QObject *parent = nullptr);
@@ -50,6 +56,12 @@ public:
     QDate *date() const;
     void setDate(QDate *newDate);
 
+    const QString &boxColor() const;
+    void setBoxColor(const QString &newBoxColor);
+
+    float boxOpacity() const;
+    void setBoxOpacity(float newBoxOpacity);
+
 signals:
     void dayChanged();
     void isheaderChanged();
@@ -58,6 +70,8 @@ signals:
     void borderWidthChanged();
     void textColorChanged();
     void dateChanged();
+    void boxColorChanged();
+    void boxOpacityChanged();
 };
 
 #endif // DAY_T_H

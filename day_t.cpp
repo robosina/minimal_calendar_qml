@@ -25,6 +25,9 @@ bool day_t::isheader() const
 
 void day_t::setIsheader(bool newIsheader)
 {
+    if(newIsheader){
+        setBoxColor("gray");
+    }
     if (m_isheader == newIsheader)
         return;
     m_isheader = newIsheader;
@@ -94,4 +97,30 @@ void day_t::setDate(QDate *newDate)
         return;
     m_date = newDate;
     emit dateChanged();
+}
+
+const QString &day_t::boxColor() const
+{
+    return m_boxColor;
+}
+
+void day_t::setBoxColor(const QString &newBoxColor)
+{
+    if (m_boxColor == newBoxColor)
+        return;
+    m_boxColor = newBoxColor;
+    emit boxColorChanged();
+}
+
+float day_t::boxOpacity() const
+{
+    return m_boxOpacity;
+}
+
+void day_t::setBoxOpacity(float newBoxOpacity)
+{
+    if (qFuzzyCompare(m_boxOpacity, newBoxOpacity))
+        return;
+    m_boxOpacity = newBoxOpacity;
+    emit boxOpacityChanged();
 }
