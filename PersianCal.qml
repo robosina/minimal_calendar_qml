@@ -13,7 +13,7 @@ Item {
     ColumnLayout{
         anchors.fill: parent
         anchors.margins: 10
-        Item{
+        /*Item{
             Layout.preferredHeight: 60
             Layout.fillWidth: true
             RowLayout{
@@ -93,55 +93,53 @@ Item {
                        }
                    }
                }
-//               Item {
-//                   Layout.fillHeight: true
-//                   Layout.fillWidth: true
-//                   Button{
-//                       anchors.fill: parent
-//                       text: "previous year"
-//                       onClicked: {
-//                           pcalendar.prev_month()
-//                       }
-//                   }
-//               }
             }
-        }
+        }*/
 
-        Column{
+        Text {
             Layout.fillHeight: true
             Layout.fillWidth: true
+            text: pcalendar.month
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.family: "B Nazanin"
+            font.bold: true
+            font.pointSize: 89
+            color: "#eeeeee"
+            Column{
+                anchors.fill: parent
+                id:grid
+                Repeater{
+                    model:PersianCalendar{
+                        id:pcalendar
+                    }
 
-            id:grid
-            Repeater{
-                model:PersianCalendar{
-                    id:pcalendar
-                }
-
-                Row{
-                    width: parent.width
-                    height: cellh
-                    property var dataModel: modelData
-                    Repeater{
-                        model:7
-                        delegate: Item{
-                            width: cellw
-                            height: dataModel[index].isheader===true?cellh*0.8:cellh
-                            Rectangle{
-                                anchors.fill: parent
-                                anchors.margins: dataModel[index].isheader===true?0:5
-                                radius: dataModel[index].isheader===true?0:4
-                                border.width: 4
-                                border.color:dataModel[index].borderColor
-                                color: dataModel[index].isheader===true?"gray":"transparent"
-                                Text {
+                    Row{
+                        width: parent.width
+                        height: cellh
+                        property var dataModel: modelData
+                        Repeater{
+                            model:7
+                            delegate: Item{
+                                width: cellw
+                                height: dataModel[index].isheader===true?cellh*0.8:cellh
+                                Rectangle{
                                     anchors.fill: parent
-                                    text: dataModel[index].day
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: dataModel[index].is_current===true?18:18
-                                    color: dataModel[index].textColor
-                                    font.family: "B Nazanin"
-                                    font.bold: true
+                                    anchors.margins: dataModel[index].isheader===true?0:5
+                                    radius: dataModel[index].isheader===true?0:8
+                                    border.width: 4
+                                    border.color:dataModel[index].borderColor
+                                    color: dataModel[index].isheader===true?"gray":"transparent"
+                                    Text {
+                                        anchors.fill: parent
+                                        text: dataModel[index].day
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        font.pointSize: dataModel[index].is_current===true?18:18
+                                        color: dataModel[index].textColor
+                                        font.family: "B Nazanin"
+                                        font.bold: true
+                                    }
                                 }
                             }
                         }
