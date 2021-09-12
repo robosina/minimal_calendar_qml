@@ -1,3 +1,3 @@
 # minimal_calendar_qml
-![Capture](https://user-images.githubusercontent.com/14973524/132838223-e1f8bd93-8899-414c-bf3f-ef20ec170f1a.PNG)
+![2](https://user-images.githubusercontent.com/14973524/132986898-eaa2a879-9057-407e-98f8-e0a5a6f86b9b.PNG)
 
