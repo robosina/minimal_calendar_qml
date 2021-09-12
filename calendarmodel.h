@@ -9,7 +9,25 @@
 #include <QMutex>
 #include <QVector>
 #include <QList>
+#include "dependencypool.h"
+#include "dependencypointer.h"
+class day_span :public QObject{
+    Q_OBJECT
+public:
+    explicit day_span(){}
+    std::unique_ptr<QCalendar::YearMonthDay> from_;
+    std::unique_ptr<QCalendar::YearMonthDay> to_;
 
+    void check_for_swap(){
+        if(from_ && to_){
+            QDate from = QDate(from_->year,from_->month,from_->day);
+            QDate to = QDate(to_->year,to_->month,to_->day);
+            if(from>to){
+                std::swap(from_,to_);
+            }
+        }
+    }
+};
 
 class CalendarModel : public QAbstractListModel
 {
@@ -19,6 +37,7 @@ class CalendarModel : public QAbstractListModel
     Q_PROPERTY(QString month READ month WRITE setMonth NOTIFY monthChanged)
     Q_PROPERTY(int year_ READ year_ WRITE setYear_ NOTIFY year_Changed)
     Q_PROPERTY(int selectMonth READ selectMonth WRITE setSelectMonth NOTIFY selectMonthChanged)
+    Q_PROPERTY(int selectYear READ selectYear WRITE setSelectYear NOTIFY selectYearChanged)
     Q_PROPERTY(QString from_day READ from_day WRITE setFrom_day NOTIFY from_dayChanged)
     Q_PROPERTY(QString to_day READ to_day WRITE setTo_day NOTIFY to_dayChanged)
 public:
@@ -51,6 +70,9 @@ public:
     const QString &to_day() const;
     void setTo_day(const QString &newTo_day);
 
+    int selectYear() const;
+    void setSelectYear(int newSelectYear);
+
 protected:
     QHash<int, QByteArray> roleNames() const override;
 
@@ -75,6 +97,8 @@ signals:
     void from_dayChanged();
 
     void to_dayChanged();
+
+    void selectYearChanged();
 
 private:
     bool is_there_interval_{false};
@@ -112,14 +136,14 @@ private:
 
     int m_selectMonth;
 
-    inline static std::unique_ptr<QCalendar::YearMonthDay> from_;
-    inline static std::unique_ptr<QCalendar::YearMonthDay> to_;
+    Dependency::Pointer<day_span> day_span_;
 
     bool does_two_ymd_same(const QCalendar::YearMonthDay& l,const QCalendar::YearMonthDay& r);
 
     bool is_between(const QCalendar::YearMonthDay& l);
     QString m_from_day;
     QString m_to_day;
+    int m_selectYear;
 };
 
 

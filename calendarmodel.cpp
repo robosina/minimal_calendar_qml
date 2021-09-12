@@ -64,24 +64,25 @@ void CalendarModel::prev_month()
 void CalendarModel::select_date_(int day, int month, int year)
 {
     auto p = std::make_pair(QCalendar::YearMonthDay(year,month,day),selected_date_);
-    if(!from_){
-        from_=std::make_unique<QCalendar::YearMonthDay>(QCalendar::YearMonthDay(year,month,day));
+    if(!day_span_->from_){
+        day_span_->from_=std::make_unique<QCalendar::YearMonthDay>(QCalendar::YearMonthDay(year,month,day));
         is_there_interval_=false;
         create_month(selected_date_);
         setFrom_day(QString("%1/%2/%3").arg(year).arg(month).arg(day));
         return;
     }
 
-    if(!to_){
-        to_=std::make_unique<QCalendar::YearMonthDay>(QCalendar::YearMonthDay(year,month,day));
+    if(!day_span_->to_){
+        day_span_->to_=std::make_unique<QCalendar::YearMonthDay>(QCalendar::YearMonthDay(year,month,day));
         is_there_interval_=true;
+        day_span_->check_for_swap();
         create_month(selected_date_);
         setTo_day(QString("%1/%2/%3").arg(year).arg(month).arg(day));
         return;
     }
 
-    from_.reset(nullptr);
-    to_.reset(nullptr);
+    day_span_->from_.reset(nullptr);
+    day_span_->to_.reset(nullptr);
     create_month(selected_date_);
     setFrom_day("");
     setTo_day("");
@@ -176,17 +177,31 @@ void CalendarModel::create_month(QDate &selected_date)
         each_row[dow-1]=day_create(QString::number(jalali_parsed.day),false,dow,&temp_date);
         if(temp_date==current_date_){
             each_row[dow-1]->setIs_current(true);
-            each_row[dow-1]->setBorderColor("green");
+            each_row[dow-1]->setBoxColor("#99ff99");
+            each_row[dow-1]->setRadius(30);
             each_row[dow-1]->setBorderWidth(6);
         }
-        if(from_ && does_two_ymd_same(jalali_parsed,*from_)){
-            each_row[dow-1]->setBoxColor("#88ff88");
-            each_row[dow-1]->setBoxOpacity(0.7);
+        if(day_span_->from_ && does_two_ymd_same(jalali_parsed,*day_span_->from_)){
+            each_row[dow-1]->setBoxColor("#8888ff");
+            each_row[dow-1]->setBoxOpacity(0.3);
+            each_row[dow-1]->setRadius(30);
+            each_row[dow-1]->setMargin(0);
+            each_row[dow-1]->setIs_from(true);
         }
 
-        if(to_ && does_two_ymd_same(jalali_parsed,*to_)){
-            each_row[dow-1]->setBoxColor("#88ff88");
-            each_row[dow-1]->setBoxOpacity(0.7);
+        if(day_span_->to_){
+            if(is_between(jalali_parsed)){
+                each_row[dow-1]->setBoxColor("#8888ff");
+                each_row[dow-1]->setBoxOpacity(0.3);
+                each_row[dow-1]->setMargin(0);
+            }
+            if(does_two_ymd_same(jalali_parsed,*day_span_->to_)){
+                each_row[dow-1]->setBoxColor("#8888ff");
+                each_row[dow-1]->setBoxOpacity(0.3);
+                each_row[dow-1]->setRadius(30);
+                each_row[dow-1]->setMargin(0);
+                each_row[dow-1]->setIs_to(true);
+            }
         }
 
         if(dow==7){
@@ -229,14 +244,15 @@ bool CalendarModel::does_two_ymd_same(const QCalendar::YearMonthDay &l, const QC
 
 bool CalendarModel::is_between(const QCalendar::YearMonthDay &l)
 {
-    if(!to_ || !from_){
-        return false;
-    }
-//    auto greater_than_from_ = (l.day>from_->day && l.month==from_->month && l.year==from_->year) || (l.month);
-//    auto less_that_to_ = l.day<from
-//    if(){
+    auto Convert=[](const QCalendar::YearMonthDay& in){
+        auto date = QDate(in.year,in.month,in.day);
+        return date;
+    };
 
-//    }
+    if(Convert(*day_span_->from_)<Convert(l) && Convert(*day_span_->to_)>Convert(l)){
+        return true;
+    }
+    return false;
 }
 
 
@@ -329,4 +345,17 @@ void CalendarModel::setTo_day(const QString &newTo_day)
         return;
     m_to_day = newTo_day;
     emit to_dayChanged();
+}
+
+int CalendarModel::selectYear() const
+{
+    return m_selectYear;
+}
+
+void CalendarModel::setSelectYear(int newSelectYear)
+{
+    if (m_selectYear == newSelectYear)
+        return;
+    m_selectYear = newSelectYear;
+    emit selectYearChanged();
 }

@@ -124,3 +124,55 @@ void day_t::setBoxOpacity(float newBoxOpacity)
     m_boxOpacity = newBoxOpacity;
     emit boxOpacityChanged();
 }
+
+int day_t::radius() const
+{
+    return m_radius;
+}
+
+void day_t::setRadius(int newRadius)
+{
+    if (m_radius == newRadius)
+        return;
+    m_radius = newRadius;
+    emit radiusChanged();
+}
+
+int day_t::margin() const
+{
+    return m_margin;
+}
+
+void day_t::setMargin(int newMargin)
+{
+    if (m_margin == newMargin)
+        return;
+    m_margin = newMargin;
+    emit marginChanged();
+}
+
+bool day_t::is_from() const
+{
+    return m_is_from;
+}
+
+void day_t::setIs_from(bool newIs_from)
+{
+    if (m_is_from == newIs_from)
+        return;
+    m_is_from = newIs_from;
+    emit is_fromChanged();
+}
+
+bool day_t::is_to() const
+{
+    return m_is_to;
+}
+
+void day_t::setIs_to(bool newIs_to)
+{
+    if (m_is_to == newIs_to)
+        return;
+    m_is_to = newIs_to;
+    emit is_toChanged();
+}
