@@ -179,7 +179,7 @@ void CalendarModel::create_month(QDate &selected_date)
             each_row[dow-1]->setIs_current(true);
             each_row[dow-1]->setBoxColor("#99ff99");
             each_row[dow-1]->setRadius(30);
-            each_row[dow-1]->setBorderWidth(6);
+            each_row[dow-1]->setMargin(0);
         }
         if(day_span_->from_ && does_two_ymd_same(jalali_parsed,*day_span_->from_)){
             each_row[dow-1]->setBoxColor("#8888ff");

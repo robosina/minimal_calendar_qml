@@ -157,6 +157,7 @@ Item {
                                         anchors.fill: parent
                                         anchors.rightMargin: dataModel[index].is_from ===true ? parent.width/2 : 0
                                         anchors.leftMargin: dataModel[index].is_to ===true ? parent.width/2 : 0
+                                        visible: dataModel[index].is_current===true?false:true
                                     }
                                 }
                                 Item{
